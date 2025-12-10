@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>California House Price Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="page-bg"></div>
+
+<div class="shell">
+
+    <header class="hero">
+        <div class="hero-text">
+            <h1>California House Price Predictor</h1>
+            <p>Get an estimated median house value for any location in California, USA.</p>
+
+            <div class="tags">
+                <span class="tag">USA 🇺🇸</span>
+                <span class="tag">California 🌴</span>
+                <span class="tag">Machine Learning</span>
+            </div>
+        </div>
+
+        <div class="hero-flags">
+            <div class="flag-card">
+                <img src="{{ url_for('static', filename='california_flag.png') }}" alt="California Flag">
+                <span>California</span>
+            </div>
+            <div class="flag-card">
+                <img src="{{ url_for('static', filename='usa_flag.png') }}" alt="USA Flag">
+                <span>United States</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-grid">
+
+        <section class="info-card">
+            <h2>Input Guide</h2>
+            <p class="info-sub">Use these ranges while entering values:</p>
+
+            <ul class="range-list">
+                <li><strong>Longitude:</strong> -124 to -114</li>
+                <li><strong>Latitude:</strong> 32 to 42</li>
+                <li><strong>Housing Median Age:</strong> 1 to 52 years</li>
+                <li><strong>Total Rooms:</strong> 2 to 39,320</li>
+                <li><strong>Total Bedrooms:</strong> 1 to 6,445</li>
+                <li><strong>Population:</strong> 3 to 35,682</li>
+                <li><strong>Households:</strong> 1 to 6,082</li>
+                <li><strong>Median Income:</strong> 0.5 to 15 (10,000 USD units)</li>
+            </ul>
+
+            <p class="tip">
+                Example row: a block near the bay, with median income around <strong>8.3</strong>, 
+                can have a house price above <strong>$450,000</strong>.
+            </p>
+        </section>
+
+        <section class="form-card">
+            <h2>Enter Location Details</h2>
+            <p class="form-subtitle">All fields are required.</p>
+
+            <form action="/predict" method="post" class="form-grid">
+
+                <div class="form-group">
+                    <label for="longitude">Longitude</label>
+                    <input type="number" step="0.01" min="-124" max="-114"
+                           id="longitude" name="longitude" placeholder="-122.23" required>
+                    <small>-124 to -114</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="latitude">Latitude</label>
+                    <input type="number" step="0.01" min="32" max="42"
+                           id="latitude" name="latitude" placeholder="37.88" required>
+                    <small>32 to 42</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="housing_median_age">Housing Median Age (years)</label>
+                    <input type="number" min="1" max="52"
+                           id="housing_median_age" name="housing_median_age" placeholder="41" required>
+                    <small>1 to 52</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="total_rooms">Total Rooms</label>
+                    <input type="number" min="2" max="39320"
+                           id="total_rooms" name="total_rooms" placeholder="880" required>
+                    <small>2 to 39,320</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="total_bedrooms">Total Bedrooms</label>
+                    <input type="number" min="1" max="6445"
+                           id="total_bedrooms" name="total_bedrooms" placeholder="129" required>
+                    <small>1 to 6,445</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="population">Population</label>
+                    <input type="number" min="3" max="35682"
+                           id="population" name="population" placeholder="322" required>
+                    <small>3 to 35,682</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="households">Households</label>
+                    <input type="number" min="1" max="6082"
+                           id="households" name="households" placeholder="126" required>
+                    <small>1 to 6,082</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="median_income">Median Income (×10,000 USD)</label>
+                    <input type="number" step="0.01" min="0.5" max="15"
+                           id="median_income" name="median_income" placeholder="8.32" required>
+                    <small>0.5 to 15.0</small>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="ocean_proximity">Ocean Proximity</label>
+                    <select id="ocean_proximity" name="ocean_proximity" required>
+                        <option value="" disabled selected>Select one</option>
+                        <option value="INLAND">INLAND</option>
+                        <option value="NEAR BAY">NEAR BAY</option>
+                        <option value="NEAR OCEAN">NEAR OCEAN</option>
+                        <option value="<1H OCEAN">&lt; 1H OCEAN</option>
+                        <option value="ISLAND">ISLAND</option>
+                    </select>
+                    <small>Distance / relation to the coast</small>
+                </div>
+
+                <button type="submit" class="btn-primary">Predict Price</button>
+
+            </form>
+
+            {% if prediction_text %}
+                <div class="result-box">
+                    <h3>{{ prediction_text }}</h3>
+                    <p class="result-note">Estimate based on historical California housing data.</p>
+                </div>
+            {% endif %}
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <span>Built with ❤️ using Machine Learning</span>
+        <span>California • USA</span>
+    </footer>
+
+</div>
+
+</body>
+</html>
